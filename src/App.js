@@ -7,6 +7,8 @@ import Loader from "./Loader";
 import Error from "./Error";
 import Start from "./Start";
 import Question from "./Question";
+import Nextbutton from "./components/Nextbutton";
+import Progress from "./components/Progress";
 
 const initialState = {
   questions: [],
@@ -44,6 +46,12 @@ function reducer(state, action) {
             ? state.score + question.points
             : state.score,
       };
+    case "next":
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
+      };
 
     default:
       throw new Error("Unknown action type");
@@ -74,13 +82,16 @@ function App() {
           <Start questionCount={questionCount} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-            score={score}
-          />
+          <>
+            <Progress index={index + 1} score={score} />
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+          </>
         )}
+        <Nextbutton dispatch={dispatch} answer={answer} />
       </Main>
     </div>
   );
