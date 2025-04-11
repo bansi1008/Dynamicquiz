@@ -9,6 +9,8 @@ import Start from "./Start";
 import Question from "./Question";
 import Nextbutton from "./components/Nextbutton";
 import Progress from "./components/Progress";
+import Finish from "./components/Finish";
+import New from "./components/New";
 
 const initialState = {
   questions: [],
@@ -52,6 +54,11 @@ function reducer(state, action) {
         index: state.index + 1,
         answer: null,
       };
+    case "finish":
+      return {
+        ...state,
+        status: "finshed",
+      };
 
     default:
       throw new Error("Unknown action type");
@@ -71,6 +78,7 @@ function App() {
 
       .catch((error) => dispatch({ type: "datafailed" }));
   }, []);
+  const numQuestions = questions.length;
 
   return (
     <div className="app">
@@ -91,7 +99,13 @@ function App() {
             />
           </>
         )}
-        <Nextbutton dispatch={dispatch} answer={answer} />
+        <Nextbutton
+          dispatch={dispatch}
+          answer={answer}
+          index={index}
+          numQuestions={numQuestions}
+        />
+        {status === "finshed" && <Finish score={score} />}
       </Main>
     </div>
   );
